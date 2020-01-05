@@ -8,6 +8,8 @@ Consistency Check provides a measure on how well the given stochastic model desc
 ![submanifold](img/NIS_def.png) <br />
 
 
+![submanifold](img/Chi_dist.png) <br />
+
 1.**Consistent** 
 The model is consistent if it provides a realistic estimation of the uncertainity.
 
