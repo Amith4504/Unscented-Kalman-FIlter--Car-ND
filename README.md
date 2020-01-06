@@ -12,6 +12,8 @@ Consistency Check provides a measure on how well the given stochastic model desc
 
 1.**Consistent** 
 The model is consistent if it provides a realistic estimation of the uncertainity.
+NIS RADAR plot for std_a = 2 , std_yawdd = 0.3 
+![submanifold](img/NIS_RADAR_1.png) <br />
 
 2.**Inconsistent**
 * OverEstimated
