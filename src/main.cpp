@@ -5,6 +5,9 @@
 #include "ukf.h"
 #include "tools.h"
 
+//#include "gnuplot-iostream.h"
+
+
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 using std::string;
@@ -41,6 +44,8 @@ int main()
   UKF ukf;
   std::cout << "Kalman Filter Instance created!!" << std::endl;
 
+  //Gnuplot gp;
+
   // used to compute the RMSE later
   Tools tools;
   vector<VectorXd> estimations;
@@ -52,6 +57,7 @@ int main()
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
+
     if (length && length > 2 && data[0] == '4' && data[1] == '2') {
       auto s = hasData(string(data));
 
@@ -160,11 +166,17 @@ int main()
 
         }  // end "telemetry" if
 
+
+
       } else {
+
+
         string msg = "42[\"manual\",{}]";
         ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
       }
     }  // end websocket message if
+
+
 
   }); // end h.onMessage
 

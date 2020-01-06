@@ -4,14 +4,15 @@
 #include "tools.h"
 #include<math.h>
 
+
+
 using Eigen::MatrixXd;
 using Eigen::VectorXd;
 
-
-/**
+/**f
  * Initializes Unscented Kalman filter
  */
-
+//namespace plt = matplotlibcpp;
 
 UKF::UKF()
 {
@@ -80,8 +81,6 @@ UKF::UKF()
 
 }
 
-
-
 UKF::~UKF() {}
 
 
@@ -143,6 +142,17 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package)
 	Prediction(dt);  //  Sigma points generated , augmented , mapped and x_ and P_ is triangulated .
 
 	// If next meas is LIDAR or RADAR meas Update with the state and Covariance using Kalman Gain
+    if(cycle >= 497){
+
+    	std::cout << "**********  PLOT HERE ? ******************" << std::endl;
+        //plt::plot(NIS_R_vec);
+        //plt::savefig("NIS_R_vec.pdf");
+    	std::cout << "NIS_R_vec "<<std::endl ;
+    	for(int i =0 ; i < NIS_R_vec.size() ; ++i)
+    	{
+    		std::cout << NIS_R_vec[i] <<std::endl;
+    	}
+    }
 
 	if(use_laser_ == true && meas_package.sensor_type_ == MeasurementPackage::LASER)
 	{
@@ -251,7 +261,7 @@ void UKF::Prediction(double delta_t)
                   ///////////////////////////   TRIANGULATE MEAN AND COVARIANCE    ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  // RESET  state to 0
+
 
 
       for(int i =0 ; i < 2*n_aug_+1 ; ++i)
@@ -348,6 +358,7 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
 
 
     ///////////  MEASUREMENT COVARIANCE MATRIX ///////////////
+	
     VectorXd z_diff = VectorXd(2);
 
     for(int i =0 ; i < 2*n_aug_+1 ; ++i)
@@ -403,6 +414,10 @@ void UKF::UpdateLidar(MeasurementPackage meas_package)
 	K.fill(0.0);
 
 	K = T * S_L.inverse();
+
+	double NIS_val_RADAR = z_diff.transpose() * S_L.inverse() * z_diff ;
+
+	NIS_L_vec.push_back(NIS_val_RADAR);
 
 	x_ = x_ + K * (z_ - z_pred);  // z_ -> SENSOR MEASUREMENT    z_pred -> PREDICTED MEASUREMETN
 
@@ -520,7 +535,12 @@ void UKF::UpdateRadar(MeasurementPackage meas_package) {
 	  while (z_diff(1)<-M_PI) z_diff(1) += 2.*M_PI;
 
 	  //calculate NIS
-	 //NIS_radar_ = z_diff.transpose() * S.inverse() * z_diff;
+
+	  double NIS_value_RADAR = z_diff.transpose() * S_R.inverse() * z_diff;
+
+	  NIS_R_vec.push_back(NIS_value_RADAR); // k length at kth  cycle
+
+
 
 	  //update state mean and covariance matrix
 	  x_ = x_ + K * z_diff;

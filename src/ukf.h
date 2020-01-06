@@ -6,6 +6,9 @@
 #include "tools.h"
 #include<vector>
 #include<string>
+//#include "matplotlibcpp.h"
+
+
 
 
 class UKF
@@ -110,6 +113,9 @@ class UKF
 
 	    int cycle;
 
+	    std::vector<double> NIS_R_vec;
+
+	    std::vector<double> NIS_L_vec;
 
 };
 
